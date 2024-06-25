@@ -4,6 +4,8 @@
  * Description: Player
  */
 
+#include <SDL2/SDL.h> //TODO (RR): don't import SDL in game code
+
 #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
@@ -2039,6 +2041,7 @@ void Player_ProcessControlStick(PlayState* play, Player* this) {
 
     D_80862B02 = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) + sPlayerControlStickAngle;
 
+    this->quickspinCount = (this->quickspinCount + 1) % 5;
     this->unk_ADE = (this->unk_ADE + 1) % ARRAY_COUNT(this->unk_ADF);
 
     if (sPlayerControlStickMagnitude < 55.0f) {
@@ -2047,6 +2050,13 @@ void Player_ProcessControlStick(PlayState* play, Player* this) {
     } else {
         var_v1 = ((u16)(sPlayerControlStickAngle + 0x2000)) >> 9;
         var_v0 = ((u16)(BINANG_SUB(D_80862B02, this->actor.shape.rot.y) + 0x2000)) >> 14;
+    }
+
+    if(CVarGetInteger("gMouseTouchEnabled", 0)) {
+        f32 x = sPlayerControlInput->cur.touch_x;
+        f32 y = sPlayerControlInput->cur.touch_y;
+        this->mouseQuickspinX[this->quickspinCount] = x;
+        this->mouseQuickspinY[this->quickspinCount] = y;
     }
 
     this->unk_ADF[this->unk_ADE] = var_v1;
@@ -5298,6 +5308,7 @@ void func_808332A0(PlayState* play, Player* this, s32 magicCost, s32 isSwordBeam
 s32 func_808333CC(Player* this) {
     s8 sp3C[4];
     s8* iter;
+    s8 iterMouse;
     s8* iter2;
     s8 temp1;
     s8 temp2;
@@ -5306,6 +5317,41 @@ s32 func_808333CC(Player* this) {
     if (this->heldItemAction == PLAYER_IA_DEKU_STICK) {
         return false;
     }
+
+    if(CVarGetInteger("gMouseTouchEnabled", 0)){ //mouse quickspin
+        iter2 = &sp3C[0];
+        u32 willSpin = 1;
+        for (i = 0; i < 4; i++, iter2++){
+            f32 relY = this->mouseQuickspinY[i + 1] - this->mouseQuickspinY[i];
+            f32 relX = this->mouseQuickspinX[i + 1] - this->mouseQuickspinX[i];
+            s16 aTan = Math_Atan2S(relY, -relX);
+            iterMouse = (u16)(aTan + 0x2000) >> 9;
+            if ((*iter2 = iterMouse) < 0) {
+                willSpin = 0;
+                break;
+            }
+            *iter2 *= 2;
+        }
+        temp1 = sp3C[0] - sp3C[1];
+        if (ABS(temp1) < 10) {
+            willSpin = 0;
+        }
+        iter2 = &sp3C[1];
+        for (i = 1; i < 3; i++, iter2++) {
+            temp2 = *iter2 - *(iter2 + 1);
+            if ((ABS(temp2) < 10) || (temp2 * temp1 < 0)) {
+                willSpin = 0;
+                break;
+            }
+        }
+        if (willSpin){
+            return 1;
+        }
+    }
+    sp3C[0] = 0;
+    sp3C[1] = 0;
+    sp3C[2] = 0;
+    sp3C[3] = 0;
 
     iter = &this->unk_ADF[0];
     iter2 = &sp3C[0];
