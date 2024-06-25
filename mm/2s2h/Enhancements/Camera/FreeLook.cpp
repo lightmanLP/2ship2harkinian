@@ -2,6 +2,8 @@
 #include "2s2h/GameInteractor/GameInteractor.h"
 #include "CameraUtils.h"
 
+#include <SDL2/SDL.h> //TODO (RR): don't import SDL in game code
+
 extern "C" {
 #include <macros.h>
 #include <functions.h>
@@ -91,10 +93,19 @@ bool Camera_FreeLook(Camera* camera) {
 
     Camera_ResetActionFuncState(camera, camera->mode);
 
-    f32 yawDiff = -sCamPlayState->state.input[0].cur.right_stick_x * 10.0f *
-                  (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.X", 1.0f));
-    f32 pitchDiff = sCamPlayState->state.input[0].cur.right_stick_y * 10.0f *
-                    (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.Y", 1.0f));
+    int mouseX, mouseY;
+    mouseX = sCamPlayState->state.input[0].cur.mouse_move_x;
+    mouseY = sCamPlayState->state.input[0].cur.mouse_move_y;
+
+    if (CVarGetInteger("gMouseTouchEnabled", 0) != 1 ||
+        /* Disable mouse movement when holding down the shield */
+        player->stateFlags1 & 0x400000 ) {
+        mouseX = 0.0f;
+        mouseY = 0.0f;
+    }
+
+    f32 yawDiff = (-sCamPlayState->state.input[0].cur.right_stick_x * 10.0f - (mouseX * 40.0f)) * (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.X", 1.0f));
+    f32 pitchDiff = (+sCamPlayState->state.input[0].cur.right_stick_y * 10.0f + (mouseY * 40.0f)) * (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.Y", 1.0f));
 
     yaw += yawDiff * GameInteractor_InvertControl(GI_INVERT_CAMERA_RIGHT_STICK_X);
     pitch += pitchDiff * -GameInteractor_InvertControl(GI_INVERT_CAMERA_RIGHT_STICK_Y);
@@ -139,6 +150,20 @@ bool Camera_FreeLook(Camera* camera) {
 bool Camera_CanFreeLook(Camera* camera) {
     f32 camX = sCamPlayState->state.input[0].cur.right_stick_x * 10.0f;
     f32 camY = sCamPlayState->state.input[0].cur.right_stick_y * 10.0f;
+
+    int mouseX, mouseY;
+    SDL_GetRelativeMouseState(&mouseX, &mouseY);
+    sCamPlayState->state.input[0].cur.mouse_move_x = mouseX;
+    sCamPlayState->state.input[0].cur.mouse_move_y = mouseY;
+
+    if (CVarGetInteger("gMouseTouchEnabled", 0) != 1) {
+        mouseX = 0.0f;
+        mouseY = 0.0f;
+    }
+
+    camX -= mouseX * 40.0f;
+    camY += mouseY * 40.0f;
+
     if (!sCanFreeLook && (fabsf(camX) >= 15.0f || fabsf(camY) >= 15.0f)) {
         sCanFreeLook = true;
     }
