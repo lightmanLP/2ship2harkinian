@@ -2052,7 +2052,7 @@ void Player_ProcessControlStick(PlayState* play, Player* this) {
         var_v0 = ((u16)(BINANG_SUB(D_80862B02, this->actor.shape.rot.y) + 0x2000)) >> 14;
     }
 
-    if(CVarGetInteger("gMouseTouchEnabled", 0)) {
+    if(CVarGetInteger("gEnhancements.Mouse.Enabled", 0)) {
         f32 x = sPlayerControlInput->cur.touch_x;
         f32 y = sPlayerControlInput->cur.touch_y;
         this->mouseQuickspinX[this->quickspinCount] = x;
@@ -5318,7 +5318,7 @@ s32 func_808333CC(Player* this) {
         return false;
     }
 
-    if(CVarGetInteger("gMouseTouchEnabled", 0)){ //mouse quickspin
+    if(CVarGetInteger("gEnhancements.Mouse.Enabled", 0)){ //mouse quickspin
         iter2 = &sp3C[0];
         u32 willSpin = 1;
         for (i = 0; i < 4; i++, iter2++){
@@ -8195,7 +8195,7 @@ s32 Player_ActionChange_11(Player* this, PlayState* play) {
                         anim = D_8085BE84[PLAYER_ANIMGROUP_19][this->modelAnimType];
 
                         /* MOD: move cursor to the middle on shield pull (RR) */
-                        if (CVarGetInteger("gMouseTouchEnabled", 0)) {
+                        if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0)) {
                             u32 width = OTRGetCurrentWidth();
                             u32 height = OTRGetCurrentHeight();
                             OTRMoveCursor(width/2, height/2);
@@ -13189,7 +13189,7 @@ s32 func_80847190(PlayState* play, Player* this, s32 arg2) {
     stickX *= GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_AIM_X);
 
      /* TODO: Move all this mouse stuff somewhere more appropriate */
-    if(CVarGetInteger("gMouseTouchEnabled", 0)) {
+    if(CVarGetInteger("gEnhancements.Mouse.Enabled", 0)) {
         int mouseX, mouseY;
         SDL_GetRelativeMouseState(&mouseX, &mouseY);
 
@@ -13197,12 +13197,12 @@ s32 func_80847190(PlayState* play, Player* this, s32 arg2) {
         sPlayerControlInput->cur.mouse_move_y = mouseY;
         if (fabsf(sPlayerControlInput->cur.mouse_move_x) > 0) {
             //printf("x:%d\n", sControlInput->cur.mouse_move_x);
-            this->actor.focus.rot.y += (sPlayerControlInput->cur.mouse_move_x) * 12.0f * (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.X", 1.0f)) *\
+            this->actor.focus.rot.y += (sPlayerControlInput->cur.mouse_move_x) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.X", 1.0f)) *\
                                        (sPlayerControlInput ? -1 : 1);
         }
         if (fabsf(sPlayerControlInput->cur.mouse_move_y) > 0) {
             //printf("y:%d\n", sControlInput->cur.mouse_move_y);
-            this->actor.focus.rot.x += (sPlayerControlInput->cur.mouse_move_y) * 12.0f * (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.Y", 1.0f));
+            this->actor.focus.rot.x += (sPlayerControlInput->cur.mouse_move_y) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.Y", 1.0f));
         }
     }
     /* ********************************************************** */
@@ -14831,7 +14831,7 @@ void Player_Action_18(Player* this, PlayState* play) {
 
         xStick *= GameInteractor_InvertControl(GI_INVERT_SHIELD_X);
         // TODO: resolve this!!
-        if (CVarGetInteger("gMouseTouchEnabled", 0)) {
+        if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0)) {
             u32 width = OTRGetCurrentWidth();
             u32 height = OTRGetCurrentHeight();
             /*
