@@ -382,13 +382,13 @@ void DrawEnhancementsMenu() {
 
             ImGui::SeparatorText("Mouse");
             UIWidgets::CVarCheckbox(
-                "Mouse/Touch Enabled", "gMouseTouchEnabled",
+                "Mouse/Touch Enabled", "gEnhancements.Mouse.Enabled",
                 { .defaultValue = false }
             );
             // no clue, no glue
             // UIWidgets::CVarCheckbox(
             //     "Apply walk speed modifier to raw player inputs if less than 100%",
-            //     "gWalkModifierToInputs",
+            //     "gEnhancements.Mouse.WalkModifierToInputs",
             //     {
             //         .tooltip = "If selected, the walk speed modifier will be taken into account for all player controls that relies on stick magnitude.\n"
             //                    "This allows, for example, to put away your sword while moving, easily achieving ESS position, or a quick adjustment of aim sensitivity.\n"
@@ -396,6 +396,10 @@ void DrawEnhancementsMenu() {
             //         .defaultValue = true
             //     }
             // );
+            UIWidgets::CVarSliderFloat("First-Person Horizontal Sensitivity: %.0f",
+                                       "gEnhancements.Mouse.POVCameraSensitivity.X", 0.01f, 5.0f, 1.0f);
+            UIWidgets::CVarSliderFloat("First-Person Vertical Sensitivity: %.0f",
+                                       "gEnhancements.Mouse.POVCameraSensitivity.Y", 0.01f, 5.0f, 1.0f);
 
             ImGui::SeparatorText("'Debug' Camera");
             if (UIWidgets::CVarCheckbox(
