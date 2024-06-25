@@ -8185,6 +8185,14 @@ s32 Player_ActionChange_11(Player* this, PlayState* play) {
                     if (!Player_IsGoronOrDeku(this)) {
                         Player_SetModelsForHoldingShield(this);
                         anim = D_8085BE84[PLAYER_ANIMGROUP_19][this->modelAnimType];
+
+                        /* MOD: move cursor to the middle on shield pull (RR) */
+                        if (CVarGetInteger("gMouseTouchEnabled", 0)) {
+                            u32 width = OTRGetCurrentWidth();
+                            u32 height = OTRGetCurrentHeight();
+                            OTRMoveCursor(width/2, height/2);
+                        }
+                        /* */
                     } else {
                         anim = (this->transformation == PLAYER_FORM_DEKU) ? &gPlayerAnim_pn_gurd
                                                                           : &gPlayerAnim_clink_normal_defense_ALL;

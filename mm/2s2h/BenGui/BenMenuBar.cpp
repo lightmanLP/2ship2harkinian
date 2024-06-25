@@ -377,16 +377,17 @@ void DrawEnhancementsMenu() {
                 "Mouse/Touch Enabled", "gMouseTouchEnabled",
                 { .defaultValue = false }
             );
-            UIWidgets::CVarCheckbox(
-                "Apply walk speed modifier to raw player inputs if less than 100%",
-                "gWalkModifierToInputs",
-                {
-                    .tooltip = "If selected, the walk speed modifier will be taken into account for all player controls that relies on stick magnitude.\n"
-                               "This allows, for example, to put away your sword while moving, easily achieving ESS position, or a quick adjustment of aim sensitivity.\n"
-                               "(May not working properly for now)",
-                    .defaultValue = true
-                }
-            );
+            // no clue, no glue
+            // UIWidgets::CVarCheckbox(
+            //     "Apply walk speed modifier to raw player inputs if less than 100%",
+            //     "gWalkModifierToInputs",
+            //     {
+            //         .tooltip = "If selected, the walk speed modifier will be taken into account for all player controls that relies on stick magnitude.\n"
+            //                    "This allows, for example, to put away your sword while moving, easily achieving ESS position, or a quick adjustment of aim sensitivity.\n"
+            //                    "(May not working properly for now)",
+            //         .defaultValue = true
+            //     }
+            // );
 
             ImGui::SeparatorText("'Debug' Camera");
             if (UIWidgets::CVarCheckbox(
