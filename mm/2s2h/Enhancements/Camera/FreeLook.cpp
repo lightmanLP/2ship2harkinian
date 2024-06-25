@@ -97,7 +97,7 @@ bool Camera_FreeLook(Camera* camera) {
     mouseX = sCamPlayState->state.input[0].cur.mouse_move_x;
     mouseY = sCamPlayState->state.input[0].cur.mouse_move_y;
 
-    if (CVarGetInteger("gMouseTouchEnabled", 0) != 1 ||
+    if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0) != 1 ||
         /* Disable mouse movement when holding down the shield */
         player->stateFlags1 & 0x400000 ) {
         mouseX = 0.0f;
@@ -156,7 +156,7 @@ bool Camera_CanFreeLook(Camera* camera) {
     sCamPlayState->state.input[0].cur.mouse_move_x = mouseX;
     sCamPlayState->state.input[0].cur.mouse_move_y = mouseY;
 
-    if (CVarGetInteger("gMouseTouchEnabled", 0) != 1) {
+    if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0) != 1) {
         mouseX = 0.0f;
         mouseY = 0.0f;
     }
