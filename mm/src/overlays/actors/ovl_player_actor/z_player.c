@@ -13188,6 +13188,25 @@ s32 func_80847190(PlayState* play, Player* this, s32 arg2) {
 
     stickX *= GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_AIM_X);
 
+     /* TODO: Move all this mouse stuff somewhere more appropriate */
+    if(CVarGetInteger("gMouseTouchEnabled", 0)) {
+        int mouseX, mouseY;
+        SDL_GetRelativeMouseState(&mouseX, &mouseY);
+
+        sPlayerControlInput->cur.mouse_move_x = mouseX;
+        sPlayerControlInput->cur.mouse_move_y = mouseY;
+        if (fabsf(sPlayerControlInput->cur.mouse_move_x) > 0) {
+            //printf("x:%d\n", sControlInput->cur.mouse_move_x);
+            this->actor.focus.rot.y += (sPlayerControlInput->cur.mouse_move_x) * 12.0f * (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.X", 1.0f)) *\
+                                       (sPlayerControlInput ? -1 : 1);
+        }
+        if (fabsf(sPlayerControlInput->cur.mouse_move_y) > 0) {
+            //printf("y:%d\n", sControlInput->cur.mouse_move_y);
+            this->actor.focus.rot.x += (sPlayerControlInput->cur.mouse_move_y) * 12.0f * (CVarGetFloat("gEnhancements.Camera.RightStick.CameraSensitivity.Y", 1.0f));
+        }
+    }
+    /* ********************************************************** */
+
     if (!func_800B7128(this) && !func_8082EF20(this) && !arg2) {
         var_s0 = sPlayerControlInput->rel.stick_y * 0xF0;
         Math_SmoothStepToS(&this->actor.focus.rot.x, var_s0, 0xE, 0xFA0, 0x1E);
@@ -14811,6 +14830,20 @@ void Player_Action_18(Player* this, PlayState* play) {
         s16 var_a3;
 
         xStick *= GameInteractor_InvertControl(GI_INVERT_SHIELD_X);
+        // TODO: resolve this!!
+        if (CVarGetInteger("gMouseTouchEnabled", 0)) {
+            u32 width = OTRGetCurrentWidth();
+            u32 height = OTRGetCurrentHeight();
+            /*
+             * Y: -12800 ~ +12700
+             * X: -15360 ~ +15240
+             */
+            f32 xBound = 15360 / ((f32)width / 2);
+            f32 yBound = 12800 / ((f32)height / 2);
+            yStick += +(sPlayerControlInput->cur.touch_y - (height) / 2) * yBound;
+            xStick -= +(sPlayerControlInput->cur.touch_x - (width) / 2) * xBound;
+        }
+
         var_a1 = (yStick * Math_CosS(temp_a0)) + (Math_SinS(temp_a0) * xStick);
         temp_ft5 = (xStick * Math_CosS(temp_a0)) - (Math_SinS(temp_a0) * yStick);
 
