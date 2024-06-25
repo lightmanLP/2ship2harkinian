@@ -135,6 +135,8 @@ void Gfx_UnregisterBlendedTexture(const char* name);
 void Gfx_TextureCacheDelete(const uint8_t* texAddr);
 void CheckTracker_OnMessageClose();
 
+void OTRMoveCursor(uint32_t x, uint32_t y); //(RR) for shield
+
 int32_t GetGIID(uint32_t itemID);
 #endif
 
