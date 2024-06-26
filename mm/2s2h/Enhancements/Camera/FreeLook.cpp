@@ -3,6 +3,7 @@
 #include "Enhancements/GameInteractor/GameInteractor.h"
 #include "CameraUtils.h"
 
+#include "BenPort.h"
 #include <SDL2/SDL.h> //TODO (RR): don't import SDL in game code
 
 extern "C" {
@@ -199,6 +200,7 @@ void RegisterCameraFreeLook() {
     if (CVarGetInteger("gEnhancements.Camera.FreeLook.Enable", 0)) {
         freeLookCameraVBHookId = REGISTER_VB_SHOULD(GI_VB_USE_CUSTOM_CAMERA, {
             Camera* camera = static_cast<Camera*>(opt);
+            static bool isTriggered = false;
             switch (sCameraSettings[camera->setting].cameraModes[camera->mode].funcId) {
                 case CAM_FUNC_NORMAL0:
                 case CAM_FUNC_NORMAL1:
@@ -210,11 +212,24 @@ void RegisterCameraFreeLook() {
                 case CAM_FUNC_UNIQUE2:
                 case CAM_FUNC_UNIQUE3:
                     if (Camera_CanFreeLook(camera)) {
-                        Camera_FreeLook(camera);
+                        /* MOD: move cursor to the middle on free look enter */
+                        if (!isTriggered) {
+                            if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0)) {
+                                u32 width = OTRGlobals::Instance->context->GetWindow()->GetWidth();
+                                u32 height = OTRGlobals::Instance->context->GetWindow()->GetHeight();
+                                OTRGlobals::Instance->context->GetWindow()->MoveCursor(width/2, height/2);
+                            }
+                            isTriggered = true;
+                        } else {
+                            Camera_FreeLook(camera);
+                        }
                         *should = false;
+                    } else {
+                        isTriggered = false;
                     }
                     break;
                 default:
+                    isTriggered = false;
                     break;
             }
         });
