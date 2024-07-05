@@ -98,6 +98,7 @@ bool Camera_FreeLook(Camera* camera) {
     mouseY = sCamPlayState->state.input[0].cur.mouse_move_y;
 
     if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0) != 1 ||
+        SDL_GetRelativeMouseMode() == SDL_FALSE ||
         /* Disable mouse movement when holding down the shield */
         player->stateFlags1 & 0x400000 ) {
         mouseX = 0.0f;
