@@ -158,7 +158,7 @@ bool Camera_CanFreeLook(Camera* camera) {
     sCamPlayState->state.input[0].cur.mouse_move_x = mouseX;
     sCamPlayState->state.input[0].cur.mouse_move_y = mouseY;
 
-    if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0) != 1) {
+    if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0) != 1 || SDL_GetRelativeMouseMode() == SDL_FALSE) {
         mouseX = 0.0f;
         mouseY = 0.0f;
     }
@@ -214,7 +214,7 @@ void RegisterCameraFreeLook() {
                     if (Camera_CanFreeLook(camera)) {
                         /* MOD: move cursor to the middle on free look enter */
                         if (!isTriggered) {
-                            if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0)) {
+                            if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0) && SDL_GetRelativeMouseMode() == SDL_TRUE) {
                                 u32 width = OTRGlobals::Instance->context->GetWindow()->GetWidth();
                                 u32 height = OTRGlobals::Instance->context->GetWindow()->GetHeight();
                                 OTRGlobals::Instance->context->GetWindow()->MoveCursor(width/2, height/2);
