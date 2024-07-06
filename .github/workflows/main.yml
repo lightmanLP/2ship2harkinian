@@ -2,7 +2,9 @@ name: generate-builds
 on:
   push:
     branches:
+      - mouse
       - mouse-dev
+      - tweaked-dev
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -165,6 +167,7 @@ jobs:
         retention-days: 1
 
   build-macos:
+    if: false
     needs: generate-2ship-otr
     runs-on: macos-14
     steps:
