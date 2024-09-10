@@ -442,6 +442,13 @@ void DrawEnhancementsMenu() {
                 "Mouse/Touch Enabled", "gEnhancements.Mouse.Enabled",
                 { .defaultValue = false }
             );
+            UIWidgets::CVarCheckbox(
+                "Mouse Quickspin Inputs", "gEnhancements.Mouse.Quickspin",
+                {
+                    .tooltip = "Enables quickspin attack trigger via mouse inputs",
+                    .defaultValue = true
+                }
+            );
             // no clue, no glue
             // UIWidgets::CVarCheckbox(
             //     "Apply walk speed modifier to raw player inputs if less than 100%",
