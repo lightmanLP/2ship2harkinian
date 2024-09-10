@@ -2052,11 +2052,13 @@ void Player_ProcessControlStick(PlayState* play, Player* this) {
         var_v0 = ((u16)(BINANG_SUB(D_80862B02, this->actor.shape.rot.y) + 0x2000)) >> 14;
     }
 
-    if(CVarGetInteger("gEnhancements.Mouse.Enabled", 0) && SDL_GetRelativeMouseMode() == SDL_TRUE) {
-        f32 x = sPlayerControlInput->cur.touch_x;
-        f32 y = sPlayerControlInput->cur.touch_y;
-        this->mouseQuickspinX[this->quickspinCount] = x;
-        this->mouseQuickspinY[this->quickspinCount] = y;
+    if(
+        CVarGetInteger("gEnhancements.Mouse.Enabled", 0)
+        && CVarGetInteger("gEnhancements.Mouse.Quickspin", 1)
+        && SDL_GetRelativeMouseMode() == SDL_TRUE
+    ) {
+        this->mouseQuickspinX[this->quickspinCount] = (f32) sPlayerControlInput->cur.touch_x;
+        this->mouseQuickspinY[this->quickspinCount] = (f32) sPlayerControlInput->cur.touch_y;
     }
 
     this->unk_ADF[this->unk_ADE] = var_v1;
@@ -5310,7 +5312,11 @@ s32 func_808333CC(Player* this) {
         return false;
     }
 
-    if(CVarGetInteger("gEnhancements.Mouse.Enabled", 0) && SDL_GetRelativeMouseMode() == SDL_TRUE){ //mouse quickspin
+    if(
+        CVarGetInteger("gEnhancements.Mouse.Enabled", 0)
+        && CVarGetInteger("gEnhancements.Mouse.Quickspin", 1)
+        && SDL_GetRelativeMouseMode() == SDL_TRUE
+    ){ //mouse quickspin
         iter2 = &sp3C[0];
         u32 willSpin = 1;
         for (i = 0; i < 4; i++, iter2++){
