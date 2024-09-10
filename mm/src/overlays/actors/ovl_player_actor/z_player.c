@@ -14690,6 +14690,10 @@ void Player_Action_18(Player* this, PlayState* play) {
         }
     }
 
+    const bool mouseEnabled = (
+        CVarGetInteger("gEnhancements.Mouse.Enabled", 0)
+        && SDL_GetRelativeMouseMode() == SDL_TRUE
+    );
     if (this->av2.actionVar2 != 0) {
         f32 yStick = sPlayerControlInput->rel.stick_y * 180;
         f32 xStick = sPlayerControlInput->rel.stick_x * -120;
@@ -14699,7 +14703,7 @@ void Player_Action_18(Player* this, PlayState* play) {
         s16 var_a2;
         s16 var_a3;
 
-        if (CVarGetInteger("gEnhancements.Mouse.Enabled", 0) && SDL_GetRelativeMouseMode() == SDL_TRUE) {
+        if (mouseEnabled) {
             u32 width = OTRGetCurrentWidth();
             u32 height = OTRGetCurrentHeight();
             /*
@@ -14710,6 +14714,9 @@ void Player_Action_18(Player* this, PlayState* play) {
             f32 yBound = 12800 / ((f32)height / 2);
             yStick += +(sPlayerControlInput->cur.touch_y - (height) / 2) * yBound;
             xStick -= +(sPlayerControlInput->cur.touch_x - (width) / 2) * xBound;
+
+            // Plain shield movement instead of camera-relative one
+            temp_a0 = 0;
         }
 
         var_a1 = (yStick * Math_CosS(temp_a0)) + (Math_SinS(temp_a0) * xStick);
