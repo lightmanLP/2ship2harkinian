@@ -43,6 +43,10 @@ class OTRGlobals {
 uint32_t IsGameMasterQuest();
 #endif
 
+uint32_t OTRGetCurrentWidth(void);
+uint32_t OTRGetCurrentHeight(void);
+void OTRMoveCursor(uint32_t x, uint32_t y); //(RR) for shield
+
 #ifndef __cplusplus
 #include <z64bgcheck.h>
 #include <z64camera.h>
@@ -110,8 +114,6 @@ int ResourceMgr_OTRSigCheck(char* imgData);
 uint64_t osGetTime(void);
 uint32_t osGetCount(void);
 uint64_t GetFrequency();
-uint32_t OTRGetCurrentWidth(void);
-uint32_t OTRGetCurrentHeight(void);
 float OTRGetAspectRatio(void);
 int32_t OTRConvertHUDXToScreenX(int32_t v);
 float OTRGetDimensionFromLeftEdge(float v);
@@ -134,8 +136,6 @@ void Gfx_RegisterBlendedTexture(const char* name, u8* mask, u8* replacement);
 void Gfx_UnregisterBlendedTexture(const char* name);
 void Gfx_TextureCacheDelete(const uint8_t* texAddr);
 void CheckTracker_OnMessageClose();
-
-void OTRMoveCursor(uint32_t x, uint32_t y); //(RR) for shield
 
 int32_t GetGIID(uint32_t itemID);
 #endif
