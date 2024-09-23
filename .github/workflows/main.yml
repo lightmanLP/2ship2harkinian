@@ -5,6 +5,7 @@ on:
       - mouse
       - mouse-dev
       - tweaked-dev
+      - test
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -167,7 +168,6 @@ jobs:
         retention-days: 1
 
   build-macos:
-    if: false
     needs: generate-2ship-otr
     runs-on: macos-14
     steps:
@@ -233,6 +233,7 @@ jobs:
           readme.txt
 
   build-linux:
+    if: false
     needs: generate-2ship-otr
     runs-on: ubuntu-22.04
     steps:
@@ -327,6 +328,7 @@ jobs:
           readme.txt
 
   build-windows:
+    if: false
     needs: generate-2ship-otr
     runs-on: windows-latest
     steps:
