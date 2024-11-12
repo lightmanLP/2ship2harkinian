@@ -464,6 +464,9 @@ void DrawEnhancementsMenu() {
                                        "gEnhancements.Mouse.POVCameraSensitivity.X", 0.01f, 5.0f, 1.0f);
             UIWidgets::CVarSliderFloat("First-Person Vertical Sensitivity: %.0f",
                                        "gEnhancements.Mouse.POVCameraSensitivity.Y", 0.01f, 5.0f, 1.0f);
+            UIWidgets::CVarCheckbox("First-Person invert X Axis", "gEnhancements.Mouse.POVCameraInvert.X");
+            UIWidgets::CVarCheckbox("First-Person invert Y Axis", "gEnhancements.Mouse.POVCameraInvert.Y",
+                                    { .defaultValue = true });
 
             ImGui::SeparatorText("'Debug' Camera");
             if (UIWidgets::CVarCheckbox(

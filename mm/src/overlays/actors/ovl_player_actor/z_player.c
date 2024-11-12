@@ -13079,6 +13079,24 @@ s32 Ship_HandleFirstPersonAiming(PlayState* play, Player* this, s32 arg2) {
     float gyroX = 0.0f;
     float gyroY = 0.0f;
 
+    if(CVarGetInteger("gEnhancements.Mouse.Enabled", 0) && SDL_GetRelativeMouseMode() == SDL_TRUE) {
+        int mouseX, mouseY;
+        SDL_GetRelativeMouseState(&mouseX, &mouseY);
+
+        sPlayerControlInput->cur.mouse_move_x = mouseX;
+        sPlayerControlInput->cur.mouse_move_y = mouseY;
+        if (fabsf(sPlayerControlInput->cur.mouse_move_x) > 0) {
+            //printf("x:%d\n", sControlInput->cur.mouse_move_x);
+            this->actor.focus.rot.y += (sPlayerControlInput->cur.mouse_move_x) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.X", 1.0f)) *\
+                                       -GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_MOUSE_X);
+        }
+        if (fabsf(sPlayerControlInput->cur.mouse_move_y) > 0) {
+            //printf("y:%d\n", sControlInput->cur.mouse_move_y);
+            this->actor.focus.rot.x += (sPlayerControlInput->cur.mouse_move_y) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.Y", 1.0f)) *\
+                                       GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_MOUSE_Y);
+        }
+    }
+
     if (!CVarGetInteger("gEnhancements.Camera.FirstPerson.MoveInFirstPerson", 0)) {
         s32 leftStickX = sPlayerControlInput->rel.stick_x; // -60 to 60
         s32 leftStickY = sPlayerControlInput->rel.stick_y; // -60 to 60
@@ -13193,25 +13211,6 @@ s32 func_80847190(PlayState* play, Player* this, s32 arg2) {
     s32 stickX = sPlayerControlInput->rel.stick_x;
 
     stickX *= GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_AIM_X);
-
-     /* TODO: Move all this mouse stuff somewhere more appropriate */
-    if(CVarGetInteger("gEnhancements.Mouse.Enabled", 0) && SDL_GetRelativeMouseMode() == SDL_TRUE) {
-        int mouseX, mouseY;
-        SDL_GetRelativeMouseState(&mouseX, &mouseY);
-
-        sPlayerControlInput->cur.mouse_move_x = mouseX;
-        sPlayerControlInput->cur.mouse_move_y = mouseY;
-        if (fabsf(sPlayerControlInput->cur.mouse_move_x) > 0) {
-            //printf("x:%d\n", sControlInput->cur.mouse_move_x);
-            this->actor.focus.rot.y += (sPlayerControlInput->cur.mouse_move_x) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.X", 1.0f)) *\
-                                       (sPlayerControlInput ? -1 : 1);
-        }
-        if (fabsf(sPlayerControlInput->cur.mouse_move_y) > 0) {
-            //printf("y:%d\n", sControlInput->cur.mouse_move_y);
-            this->actor.focus.rot.x += (sPlayerControlInput->cur.mouse_move_y) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.Y", 1.0f));
-        }
-    }
-    /* ********************************************************** */
 
     if (!func_800B7128(this) && !func_8082EF20(this) && !arg2) {
         var_s0 = sPlayerControlInput->rel.stick_y * 0xF0;
@@ -14839,8 +14838,8 @@ void Player_Action_18(Player* this, PlayState* play) {
         s16 var_a2;
         s16 var_a3;
 
-        xStick *= GameInteractor_InvertControl(GI_INVERT_SHIELD_X);
-        // TODO: resolve this!!
+        int invertShield = GameInteractor_InvertControl(GI_INVERT_SHIELD_X);
+        xStick *= invertShield;
         if (mouseEnabled) {
             u32 width = OTRGetCurrentWidth();
             u32 height = OTRGetCurrentHeight();
@@ -14851,7 +14850,7 @@ void Player_Action_18(Player* this, PlayState* play) {
             f32 xBound = 15360 / ((f32)width / 2);
             f32 yBound = 12800 / ((f32)height / 2);
             yStick += +(sPlayerControlInput->cur.touch_y - (height) / 2) * yBound;
-            xStick -= +(sPlayerControlInput->cur.touch_x - (width) / 2) * xBound;
+            xStick -= +(sPlayerControlInput->cur.touch_x - (width) / 2) * xBound * invertShield;
 
             // Plain shield movement instead of camera-relative one
             temp_a0 = 0;
