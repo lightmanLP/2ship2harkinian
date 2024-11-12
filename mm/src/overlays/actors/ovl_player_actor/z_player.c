@@ -13086,14 +13086,12 @@ s32 Ship_HandleFirstPersonAiming(PlayState* play, Player* this, s32 arg2) {
         sPlayerControlInput->cur.mouse_move_x = mouseX;
         sPlayerControlInput->cur.mouse_move_y = mouseY;
         if (fabsf(sPlayerControlInput->cur.mouse_move_x) > 0) {
-            //printf("x:%d\n", sControlInput->cur.mouse_move_x);
             this->actor.focus.rot.y += (sPlayerControlInput->cur.mouse_move_x) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.X", 1.0f)) *\
                                        -GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_MOUSE_X);
         }
         if (fabsf(sPlayerControlInput->cur.mouse_move_y) > 0) {
-            //printf("y:%d\n", sControlInput->cur.mouse_move_y);
             this->actor.focus.rot.x += (sPlayerControlInput->cur.mouse_move_y) * 12.0f * (CVarGetFloat("gEnhancements.Mouse.POVCameraSensitivity.Y", 1.0f)) *\
-                                       GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_MOUSE_Y);
+                                       -GameInteractor_InvertControl(GI_INVERT_FIRST_PERSON_MOUSE_Y);
         }
     }
 
