@@ -12,6 +12,7 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
+#include "BenPort.h"
 #include <string.h>
 
 #include "overlays/actors/ovl_Arms_Hook/z_arms_hook.h"
