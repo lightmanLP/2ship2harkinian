@@ -3765,6 +3765,7 @@ void Player_ProcessItemButtons(Player* this, PlayState* play) {
              Player_ItemIsInUse(this, DPAD_BTN_ITEM(EQUIP_SLOT_D_DOWN)) ||
              Player_ItemIsInUse(this, DPAD_BTN_ITEM(EQUIP_SLOT_D_UP)))) ||
            // #end region
+           CHECK_BTN_ANY(sPlayerControlInput->cur.button, BTN_FP_ACTION) ||
            Player_ItemIsInUse(this, C_BTN_ITEM(EQUIP_SLOT_C_LEFT)) ||
            Player_ItemIsInUse(this, C_BTN_ITEM(EQUIP_SLOT_C_DOWN)) ||
            Player_ItemIsInUse(this, C_BTN_ITEM(EQUIP_SLOT_C_RIGHT))))) {
@@ -4204,7 +4205,7 @@ s32 func_80830FD4(PlayState* play) {
     return (play->bButtonAmmoPlusOne != 0) &&
            ((play->bButtonAmmoPlusOne < 0) ||
             CHECK_BTN_ANY(sPlayerControlInput->cur.button,
-                          BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A | BTN_DPAD_EQUIP));
+                          BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A | BTN_DPAD_EQUIP | BTN_FP_ACTION));
 }
 
 s32 func_80831010(Player* this, PlayState* play) {

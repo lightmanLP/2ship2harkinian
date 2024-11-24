@@ -1,4 +1,5 @@
 #include "BenInputEditorWindow.h"
+#include "BenPort.h"
 #include "Context.h"
 #include "Gui.h"
 #include "utils/StringHelper.h"
@@ -1558,6 +1559,13 @@ void BenInputEditorWindow::DrawPortTabContents(uint8_t portIndex) {
         DrawLEDSection(portIndex);
     } else {
         DrawLEDDeviceIcons(portIndex);
+    }
+
+    if (ImGui::CollapsingHeader("Enhancements", NULL, ImGuiTreeNodeFlags_DefaultOpen)) {
+        DrawButtonDeviceIcons(portIndex, mDpadBitmasks);
+        DrawButtonLine("First person action", portIndex, BTN_FP_ACTION, CHIP_COLOR_N64_YELLOW);
+    } else {
+        DrawButtonDeviceIcons(portIndex, mDpadBitmasks);
     }
 
     ImGui::PopStyleColor();

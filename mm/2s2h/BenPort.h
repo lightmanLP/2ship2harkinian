@@ -12,6 +12,9 @@
 #define MM_NTSC_US_10 0x5354631C
 #define MM_NTSC_US_GC 0xB443EB08
 
+// TODO: move additional keys somewhere
+#define BTN_FP_ACTION 0xF00000
+
 #ifdef __cplusplus
 #include <Context.h>
 
