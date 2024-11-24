@@ -5,6 +5,7 @@ on:
       - mouse
       - mouse-dev
       - tweaked-dev
+      - macos-test
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
