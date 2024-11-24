@@ -5,6 +5,7 @@ on:
       - mouse
       - mouse-dev
       - tweaked-dev
+      - fp-action
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
