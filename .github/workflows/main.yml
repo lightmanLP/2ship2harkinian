@@ -167,7 +167,6 @@ jobs:
         retention-days: 1
 
   build-macos:
-    if: false
     needs: generate-2ship-otr
     runs-on: macos-14
     steps:
