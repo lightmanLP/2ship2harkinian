@@ -87,4 +87,5 @@ class BenInputEditorWindow : public Ship::GuiWindow {
 
     std::map<Ship::ShipDeviceIndex, bool> mDeviceIndexVisiblity;
     void DrawDeviceVisibilityButtons();
+    void OffsetMappingPopup();
 };
