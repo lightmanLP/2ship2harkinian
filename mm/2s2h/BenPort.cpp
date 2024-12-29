@@ -162,9 +162,17 @@ OTRGlobals::OTRGlobals() {
     std::unordered_set<uint32_t> validHashes = { MM_NTSC_US_10, MM_NTSC_US_GC };
 
     // tell LUS to reserve 3 SoH specific threads (Game, Audio, Save)
-    context =
-        Ship::Context::CreateInstance("2 Ship 2 Harkinian", appShortName, "2ship2harkinian.json", archiveFiles, {}, 3,
-                                      { .SampleRate = 32000, .SampleLength = 1024, .DesiredBuffered = 1680 });
+    context = Ship::Context::CreateUninitializedInstance("2 Ship 2 Harkinian", appShortName, "2ship2harkinian.json");
+    context->InitLogging();
+    context->InitConfiguration();
+    context->InitConsoleVariables();
+    context->InitResourceManager(archiveFiles, {}, 3);
+    context->InitControlDeck(std::make_shared<LUS::ControlDeck>());
+    context->InitCrashHandler();
+    context->InitConsole();
+    context->InitWindow(std::make_shared<Fast::Fast3dWindow>());
+    context->InitAudio({ .SampleRate = 32000, .SampleLength = 1024, .DesiredBuffered = 1680 });
+    context->InitGfxDebugger();
 
     SPDLOG_INFO("Starting 2 Ship 2 Harkinian version {}", (char*)gBuildVersion);
 
