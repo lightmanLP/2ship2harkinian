@@ -194,13 +194,13 @@ void DrawSettingsMenu() {
                 AudioSeq_SetPortVolumeScale(SEQ_PLAYER_AMBIENCE, CVarGetFloat("gSettings.Audio.AmbienceVolume", 1.0f));
             }
 
-            auto currentAudioBackend = Ship::Context::GetInstance()->GetAudio()->GetAudioBackend();
+            auto currentAudioBackend = Ship::Context::GetInstance()->GetAudio()->GetCurrentAudioBackend();
             if (UIWidgets::Combobox(
                     "Audio API", &currentAudioBackend, audioBackendsMap,
                     { .tooltip = "Sets the audio API used by the game. Requires a relaunch to take effect.",
                       .disabled = Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1,
                       .disabledTooltip = "Only one audio API is available on this platform." })) {
-                Ship::Context::GetInstance()->GetAudio()->SetAudioBackend(currentAudioBackend);
+                Ship::Context::GetInstance()->GetAudio()->SetCurrentAudioBackend(currentAudioBackend);
             }
 
             ImGui::EndMenu();
@@ -265,7 +265,7 @@ void DrawSettingsMenu() {
                     int hz = Ship::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
                     if (hz >= 20 && hz <= 360) {
                         CVarSetInteger("gInterpolationFPS", hz);
-                        Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
+                        Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
                     }
                 }
             } else {

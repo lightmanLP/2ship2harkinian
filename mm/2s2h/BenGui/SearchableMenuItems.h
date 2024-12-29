@@ -680,7 +680,7 @@ void AddSettings() {
                     int hz = Ship::Context::GetInstance()->GetWindow()->GetCurrentRefreshRate();
                     if (hz >= 20 && hz <= 360) {
                         CVarSetInteger("gInterpolationFPS", hz);
-                        Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
+                        Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
                     }
                 },
                 [](widgetInfo& info) { info.isHidden = disabledMap.at(DISABLE_FOR_NOT_DIRECTX).active; } },
@@ -1564,7 +1564,7 @@ void AddDevTools() {
                     CVarSetFloat(WARP_POINT_CVAR "Z", player->actor.world.pos.z);
                     CVarSetFloat(WARP_POINT_CVAR "Rotation", player->actor.shape.rot.y);
                     CVarSetInteger(WARP_POINT_CVAR "Saved", 1);
-                    Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
+                    Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
                 },
                 [](widgetInfo& info) { info.isHidden = disabledMap.at(DISABLE_FOR_NULL_PLAY_STATE).active; } },
               { "Scene Room ID",
@@ -1594,7 +1594,7 @@ void AddDevTools() {
                     CVarClear(WARP_POINT_CVAR "Z");
                     CVarClear(WARP_POINT_CVAR "Rotation");
                     CVarClear(WARP_POINT_CVAR "Saved");
-                    Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
+                    Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
                 },
                 [](widgetInfo& info) {
                     info.isHidden = disabledMap.at(DISABLE_FOR_NULL_PLAY_STATE).active ||
@@ -1849,7 +1849,7 @@ void SearchMenuGetItem(widgetInfo& widget) {
                 };
                 break;
             case WIDGET_AUDIO_BACKEND: {
-                auto currentAudioBackend = Ship::Context::GetInstance()->GetAudio()->GetAudioBackend();
+                auto currentAudioBackend = Ship::Context::GetInstance()->GetAudio()->GetCurrentAudioBackend();
                 if (UIWidgets::Combobox(
                         "Audio API", &currentAudioBackend, audioBackendsMap,
                         { .color = menuTheme[menuThemeIndex],
@@ -1857,7 +1857,7 @@ void SearchMenuGetItem(widgetInfo& widget) {
                           .disabled =
                               Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1,
                           .disabledTooltip = "Only one audio API is available on this platform." })) {
-                    Ship::Context::GetInstance()->GetAudio()->SetAudioBackend(currentAudioBackend);
+                    Ship::Context::GetInstance()->GetAudio()->SetCurrentAudioBackend(currentAudioBackend);
                 }
             } break;
             case WIDGET_VIDEO_BACKEND: {

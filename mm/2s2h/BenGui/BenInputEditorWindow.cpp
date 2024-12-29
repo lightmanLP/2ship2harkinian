@@ -58,7 +58,7 @@ void BenInputEditorWindow::UpdateElement() {
             }
         }
 
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->BlockImGuiGamepadNavigation();
+        Ship::Context::GetInstance()->GetWindow()->GetGui()->BlockGamepadNavigation();
     } else {
         if (mGameInputBlockTimer != INT32_MAX) {
             mGameInputBlockTimer--;
@@ -69,13 +69,13 @@ void BenInputEditorWindow::UpdateElement() {
             }
         }
 
-        if (Ship::Context::GetInstance()->GetWindow()->GetGui()->ImGuiGamepadNavigationEnabled()) {
+        if (Ship::Context::GetInstance()->GetWindow()->GetGui()->GamepadNavigationEnabled()) {
             mMappingInputBlockTimer = ImGui::GetIO().Framerate / 3;
         } else {
             mMappingInputBlockTimer = INT32_MAX;
         }
 
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->UnblockImGuiGamepadNavigation();
+        Ship::Context::GetInstance()->GetWindow()->GetGui()->UnblockGamepadNavigation();
     }
 }
 
@@ -1237,7 +1237,7 @@ void BenInputEditorWindow::DrawButtonDeviceIcons(uint8_t portIndex, std::set<CON
     }
 }
 
-void BenInputEditorWindow::DrawAnalogStickDeviceIcons(uint8_t portIndex, Ship::Stick stick) {
+void BenInputEditorWindow::DrawAnalogStickDeviceIcons(uint8_t portIndex, Ship::StickIndex stick) {
     std::set<Ship::ShipDeviceIndex> allLusDeviceIndices;
     allLusDeviceIndices.insert(Ship::ShipDeviceIndex::Keyboard);
     for (auto [lusIndex, mapping] : Ship::Context::GetInstance()
@@ -1250,7 +1250,7 @@ void BenInputEditorWindow::DrawAnalogStickDeviceIcons(uint8_t portIndex, Ship::S
     std::vector<std::pair<Ship::ShipDeviceIndex, bool>> lusDeviceIndiciesWithMappings;
     for (auto lusIndex : allLusDeviceIndices) {
         auto controllerStick =
-            stick == Ship::Stick::LEFT_STICK
+            stick == Ship::StickIndex::LEFT_STICK
                 ? Ship::Context::GetInstance()->GetControlDeck()->GetControllerByPort(portIndex)->GetLeftStick()
                 : Ship::Context::GetInstance()->GetControlDeck()->GetControllerByPort(portIndex)->GetRightStick();
         if (controllerStick->HasMappingsForShipDeviceIndex(lusIndex)) {

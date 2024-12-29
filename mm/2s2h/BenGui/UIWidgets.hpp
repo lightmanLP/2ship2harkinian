@@ -351,7 +351,7 @@ namespace UIWidgets {
         int32_t value = CVarGetInteger(cvarName, options.defaultIndex);
         if (Combobox<T>(label, &value, comboMap, options)) {
             CVarSetInteger(cvarName, value);
-            Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
             ShipInit::Init(cvarName);
             dirty = true;
         }
@@ -364,7 +364,7 @@ namespace UIWidgets {
         int32_t value = CVarGetInteger(cvarName, options.defaultIndex);
         if (Combobox<T>(label, &value, comboVector, options)) {
             CVarSetInteger(cvarName, value);
-            Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
             ShipInit::Init(cvarName);
             dirty = true;
         }
@@ -377,7 +377,7 @@ namespace UIWidgets {
         int32_t value = CVarGetInteger(cvarName, options.defaultIndex);
         if (Combobox<T>(label, &value, comboArray, options)) {
             CVarSetInteger(cvarName, value);
-            Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesOnNextTick();
+            Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
             ShipInit::Init(cvarName);
             dirty = true;
         }
