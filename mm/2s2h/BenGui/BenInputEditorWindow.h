@@ -77,7 +77,7 @@ class BenInputEditorWindow : public Ship::GuiWindow {
     std::set<CONTROLLERBUTTONS_T> mButtonsBitmasks;
     std::set<CONTROLLERBUTTONS_T> mDpadBitmasks;
     void DrawButtonDeviceIcons(uint8_t portIndex, std::set<CONTROLLERBUTTONS_T> bitmasks);
-    void DrawAnalogStickDeviceIcons(uint8_t portIndex, Ship::Stick stick);
+    void DrawAnalogStickDeviceIcons(uint8_t portIndex, Ship::StickIndex stick);
     void DrawRumbleDeviceIcons(uint8_t portIndex);
     void DrawGyroDeviceIcons(uint8_t portIndex);
     void DrawLEDDeviceIcons(uint8_t portIndex);

@@ -993,10 +993,10 @@ extern "C" uint32_t ResourceMgr_GetGameRegion(int index) {
 }
 
 extern "C" void ResourceMgr_LoadDirectory(const char* resName) {
-    Ship::Context::GetInstance()->GetResourceManager()->LoadDirectory(resName);
+    Ship::Context::GetInstance()->GetResourceManager()->LoadResources(resName);
 }
 extern "C" void ResourceMgr_DirtyDirectory(const char* resName) {
-    Ship::Context::GetInstance()->GetResourceManager()->DirtyDirectory(resName);
+    Ship::Context::GetInstance()->GetResourceManager()->DirtyResources(resName);
 }
 
 // OTRTODO: There is probably a more elegant way to go about this...
