@@ -443,6 +443,29 @@ void DrawEnhancementsMenu() {
                 CVarSetFloat("gEnhancements.Camera.FreeLook.MinPitch", std::min(maxY, minY));
             }
 
+            ImGui::SeparatorText("Mouse");
+            UIWidgets::CVarCheckbox("Mouse Enabled", "gEnhancements.Camera.Mouse.Enabled", { .defaultValue = false });
+            if (CVarGetInteger("gEnhancements.Camera.Mouse.Enabled", 0)) {
+                UIWidgets::CVarCheckbox("Invert Camera X Axis", "gEnhancements.Camera.Mouse.InvertX",
+                                        { .tooltip = "Inverts the Camera X Axis" });
+                UIWidgets::CVarCheckbox("Invert Camera Y Axis", "gEnhancements.Camera.Mouse.InvertY",
+                                        { .tooltip = "Inverts the Camera Y Axis", .defaultValue = true });
+                // TODO: check boundaries
+                UIWidgets::CVarSliderFloat("Third-Person Horizontal Sensitivity: %.0f",
+                                           "gEnhancements.Camera.Mouse.CameraSensitivity.X", 0.01f, 5.0f, 1.0f);
+                UIWidgets::CVarSliderFloat("Third-Person Vertical Sensitivity: %.0f",
+                                           "gEnhancements.Camera.Mouse.CameraSensitivity.Y", 0.01f, 5.0f, 1.0f);
+
+                UIWidgets::CVarCheckbox("First-Person invert X Axis", "gEnhancements.Camera.Mouse.FirstPerson.InvertX");
+                UIWidgets::CVarCheckbox("First-Person invert Y Axis", "gEnhancements.Camera.Mouse.FirstPerson.InvertY",
+                                        { .defaultValue = true });
+                // TODO: check boundaries
+                UIWidgets::CVarSliderFloat("First-Person Horizontal Sensitivity: %.0f",
+                                           "gEnhancements.Camera.Mouse.FirstPerson.SensitivityX", 0.01f, 5.0f, 1.0f);
+                UIWidgets::CVarSliderFloat("First-Person Vertical Sensitivity: %.0f",
+                                           "gEnhancements.Camera.Mouse.FirstPerson.SensitivityY", 0.01f, 5.0f, 1.0f);
+            }
+
             ImGui::SeparatorText("'Debug' Camera");
             UIWidgets::CVarCheckbox("Debug Camera", "gEnhancements.Camera.DebugCam.Enable",
                                     { .tooltip = "Enables free camera control.",
