@@ -103,8 +103,9 @@ bool Camera_FreeLook(Camera* camera) {
 
     if (CVarGetInteger("gEnhancements.Camera.Mouse.Enabled", 0) && Mouse_IsCaptured() &&
         // Disable mouse movement when holding down the shield
-        // TODO: test if this check still needed
-        !(player->stateFlags1 & 0x400000)
+        // TODO: enhancement check
+        // TODO: rename flag
+        !((player->stateFlags1 & 0x400000) && true)
     ) {
         MouseDelta mouseDelta = Mouse_GetDelta();
         yaw -= mouseDelta.x * 40.0f * CVarGetFloat("gEnhancements.Camera.Mouse.CameraSensitivity.X", 1.0f) *
@@ -165,9 +166,9 @@ bool Camera_CanFreeLook(Camera* camera) {
     }
     // TODO: check Z target mode potential
     // Pressing Z will "Reset" Camera
-    // if (CHECK_BTN_ALL(sCamPlayState->state.input[0].press.button, BTN_Z)) {
-    //     sCanFreeLook = false;
-    // }
+    if (CHECK_BTN_ALL(sCamPlayState->state.input[0].press.button, BTN_Z)) {
+        sCanFreeLook = true;  // false;
+    }
     // Reset camera during cutscenes
     if (gPlayState != nullptr && Player_InCsMode(gPlayState)) {
         sCanFreeLook = false;
