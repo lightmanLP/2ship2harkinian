@@ -731,13 +731,13 @@ void DrawSlot(InventorySlot slot) {
 
     if (currentItemId != ITEM_NONE) {
         textureName = (const char*)gItemIcons[currentItemId];
-        textureId = Ship::Context::GetInstance()->GetWindow()->GetGui()->GetTextureByName(
-            textureName);
+        textureId = Ship::Context::GetInstance()->GetWindow()->GetGui()->GetTextureByName(textureName);
     }
 
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-    auto imgBtn = ImGui::ImageButton(textureName, textureId, ImVec2(INV_GRID_ICON_SIZE, INV_GRID_ICON_SIZE), ImVec2(0, 0), ImVec2(1, 1),
-                    ImVec4(0, 0, 0, 0), ImVec4(1, 1, 1, currentItemId == ITEM_NONE ? 0.4f : 1.0f));
+    auto imgBtn =
+        ImGui::ImageButton(textureName, textureId, ImVec2(INV_GRID_ICON_SIZE, INV_GRID_ICON_SIZE), ImVec2(0, 0),
+                           ImVec2(1, 1), ImVec4(0, 0, 0, 0), ImVec4(1, 1, 1, currentItemId == ITEM_NONE ? 0.4f : 1.0f));
     ImGui::PopStyleVar();
     if (imgBtn) {
         if (safeMode && safeItemsForInventorySlot[slot].size() < 2) {
@@ -772,9 +772,8 @@ void DrawSlot(InventorySlot slot) {
             const char* textureName = (const char*)gItemIcons[id];
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
             auto imgBtn = ImGui::ImageButton(
-                    textureName,
-                    Ship::Context::GetInstance()->GetWindow()->GetGui()->GetTextureByName(textureName),
-                    ImVec2(INV_GRID_ICON_SIZE, INV_GRID_ICON_SIZE), ImVec2(0, 0), ImVec2(1, 1));
+                textureName, Ship::Context::GetInstance()->GetWindow()->GetGui()->GetTextureByName(textureName),
+                ImVec2(INV_GRID_ICON_SIZE, INV_GRID_ICON_SIZE), ImVec2(0, 0), ImVec2(1, 1));
             ImGui::PopStyleVar();
             if (imgBtn) {
                 gSaveContext.save.saveInfo.inventory.items[selectedInventorySlot] = id;
