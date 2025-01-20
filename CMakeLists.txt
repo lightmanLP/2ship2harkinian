@@ -108,6 +108,12 @@ include(CMake/GlobalSettingsInclude.cmake OPTIONAL)
 ################################################################################
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+# FIXME: temp patch to resolve imgui cache issues
+execute_process(
+    COMMAND git reset --hard
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-src
+)
+
 ################################################################################
 # Sub-projects
 ################################################################################
@@ -240,3 +246,17 @@ endif()
 
 set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_SOURCE_DIR}/CMake/Packaging-2.cmake)
 include(CMake/Packaging.cmake)
+
+# FIXME: temp patch to resolve imgui cache issues
+execute_process(
+    COMMAND git config --local user.email "author@example.com"
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-src
+)
+execute_process(
+    COMMAND git config --local user.name "Noname"
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-src
+)
+execute_process(
+    COMMAND git commit -a -m patch
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/_deps/imgui-src
+)
