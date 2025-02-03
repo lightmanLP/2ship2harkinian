@@ -248,7 +248,6 @@ OTRGlobals::OTRGlobals() {
                                     "KeyFrameAnim", static_cast<uint32_t>(SOH::ResourceType::TSH_CKeyFrameAnim), 0);
     loader->RegisterResourceFactory(std::make_shared<SOH::ResourceFactoryBinaryKeyFrameSkel>(), RESOURCE_FORMAT_BINARY,
                                     "KeyFrameSkel", static_cast<uint32_t>(SOH::ResourceType::TSH_CKeyFrameSkel), 0);
-    context->GetControlDeck()->SetSinglePlayerMappingMode(true);
 
     // gSaveStateMgr = std::make_shared<SaveStateMgr>();
     // gRandomizer = std::make_shared<Randomizer>();
@@ -1765,17 +1764,25 @@ extern "C" void AudioPlayer_Play(const uint8_t* buf, uint32_t len) {
 }
 
 extern "C" int Controller_ShouldRumble(size_t slot) {
-    for (auto [id, mapping] : Ship::Context::GetInstance()
-                                  ->GetControlDeck()
-                                  ->GetControllerByPort(static_cast<uint8_t>(slot))
-                                  ->GetRumble()
-                                  ->GetAllRumbleMappings()) {
-        if (mapping->PhysicalDeviceIsConnected()) {
-            return 1;
-        }
+    // don't rumble if we don't have rumble mappings
+    if (Ship::Context::GetInstance()
+            ->GetControlDeck()
+            ->GetControllerByPort(static_cast<uint8_t>(slot))
+            ->GetRumble()
+            ->GetAllRumbleMappings().empty()) {
+        return 0;
     }
 
-    return 0;
+    // don't rumble if we don't have connected gamepads
+    if (Ship::Context::GetInstance()
+            ->GetControlDeck()
+            ->GetConnectedPhysicalDeviceManager()
+            ->GetConnectedSDLGamepadsForPort(slot).empty()) {
+        return 0;
+    }
+
+    // rumble
+    return 1;
 }
 
 // Helper to redirect the user to the boot screen in place of known console crash scenarios, and emits a notification
