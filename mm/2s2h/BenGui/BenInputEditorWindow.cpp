@@ -1318,19 +1318,6 @@ void BenInputEditorWindow::DrawSetDefaultsButton(uint8_t portIndex) {
     }
 
     if (ImGui::BeginPopup(popupId.c_str())) {
-        std::map<Ship::PhysicalDeviceType, std::pair<std::string, int32_t>> indexMappings;
-        for (auto [lusIndex, mapping] : Ship::Context::GetInstance()
-                                            ->GetControlDeck()
-                                            ->GetDeviceIndexMappingManager()
-                                            ->GetAllDeviceIndexMappings()) {
-            auto sdlIndexMapping = std::static_pointer_cast<Ship::ShipDeviceIndexToSDLDeviceIndexMapping>(mapping);
-            if (sdlIndexMapping == nullptr) {
-                continue;
-            }
-
-            indexMappings[lusIndex] = { sdlIndexMapping->GetSDLControllerName(), sdlIndexMapping->GetSDLDeviceIndex() };
-        }
-
         bool shouldClose = false;
         ImGui::PushStyleColor(ImGuiCol_Button, BUTTON_COLOR_KEYBOARD_BEIGE);
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, BUTTON_COLOR_KEYBOARD_BEIGE_HOVERED);
