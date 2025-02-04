@@ -607,6 +607,7 @@ void BenMenu::AddEnhancements() {
                      .DefaultValue(0.5f)
                      .IsPercentage());
 
+    path.column = 3;
     AddWidget(path, "Mouse", WIDGET_SEPARATOR_TEXT);
     AddWidget(path, "Mouse Enabled", WIDGET_CVAR_CHECKBOX)
         .CVar("gEnhancements.Camera.Mouse.Enabled")
