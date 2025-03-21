@@ -12,6 +12,7 @@ void Mouse_Update() {
     Ship::Coords coords = Ship::Context::GetInstance()->GetWindow()->GetMouseDelta();
     current.x = coords.x;
     current.y = coords.y;
+    SPDLOG_INFO("COORDS: {} {}", current.x, current.y);
 }
 
 MouseCoords Mouse_GetDelta() {
