@@ -28,6 +28,7 @@ void Mouse_SetCursorPos(s32 x, s32 y) {
 }
 
 bool Mouse_IsCaptured() {
+    return true;
     return Ship::Context::GetInstance()->GetWindow()->IsMouseCaptured();
 }
 
