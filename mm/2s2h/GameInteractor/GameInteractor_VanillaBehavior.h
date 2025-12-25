@@ -2604,7 +2604,10 @@ typedef enum {
     // ```
     // #### `args`
     // - `*EnItem00`
-    VB_UPDATE_ITEM00
+    VB_UPDATE_ITEM00,
+
+    // FIXME: add docs
+    VB_SHOULD_QUICKSPIN,
 } GIVanillaBehavior;
 
 #endif
