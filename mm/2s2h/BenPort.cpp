@@ -116,6 +116,7 @@ CrowdControl* CrowdControl::Instance;
 #include "2s2h/Enhancements/Audio/AudioCollection.h"
 #include "BenGui/BenInputEditorWindow.h"
 #include "2s2h/Enhancements/Controls/Mouse/LocalMouseStateManager.h"
+#include "2s2h/Enhancements/Controls/Mouse/Mouse.h"
 
 OTRGlobals* OTRGlobals::Instance;
 GameInteractor* GameInteractor::Instance;
@@ -633,6 +634,7 @@ void OTRGlobals::Initialize() {
     context->GetWindow()->SetAutoCaptureMouse(CVarGetInteger("gSettings.EnableMouse", 0) &&
                                               CVarGetInteger("gSettings.AutoCaptureMouse", 1));
     context->GetWindow()->SetForceCursorVisibility(CVarGetInteger("gSettings.CursorVisibility", 0));
+    Mouse_SetForceToggle(CVarGetInteger("gSettings.ForceMouseCaptureOnStartup", 0), 1);
 
     context->InitAudio({ .SampleRate = 32000, .SampleLength = 1024, .DesiredBuffered = 1680 });
 
