@@ -2606,7 +2606,12 @@ typedef enum {
     // - `*EnItem00`
     VB_UPDATE_ITEM00,
 
-    // FIXME: add docs
+    // #### `result`
+    // ```c
+    // false
+    // ```
+    // #### `args`
+    // - `*s8` (control stick spin angles array)
     VB_SHOULD_QUICKSPIN,
 } GIVanillaBehavior;
 
