@@ -34,6 +34,7 @@ DEFINE_HOOK(OnActorKill, (Actor * actor))
 DEFINE_HOOK(OnActorDestroy, (Actor * actor))
 DEFINE_HOOK(OnPlayerPostLimbDraw, (Player * player, s32 limbIndex))
 DEFINE_HOOK(OnPlayerReleaseHeldActor, (PlayState * play, Player* player, Actor* heldActor))
+DEFINE_HOOK(OnPlayerShieldControl, (Player* player, PlayState* play, f32* xInput, f32* yInput, bool* handled))
 DEFINE_HOOK(OnBossDefeated, (s16 actorId))
 DEFINE_HOOK(OnActorEntryHalfDaysBits, (ActorEntry * actorEntry, s32* halfDaysBits))
 
