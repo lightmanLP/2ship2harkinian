@@ -1164,8 +1164,8 @@ void BenMenu::AddEnhancements() {
     AddWidget(path, "Active Item on B", WIDGET_CVAR_CHECKBOX)
         .CVar("gEnhancements.Equipment.ActiveItemOnB")
         .Options(CheckboxOptions().Tooltip(
-            "Press B to use the item currently held by Link (bow, hookshot, hammer, Great Fairy's Sword...). "
-            "Hold B to keep aiming in first person, release to fire."));
+            "Press B to use the item currently held by Link (Bow, Hookshot, Great Fairy's Sword and Deku Stick). "
+            "Second press on item unequips it."));
     AddWidget(path, "Invert Zora Swim Y Axis", WIDGET_CVAR_CHECKBOX)
         .CVar("gEnhancements.Player.InvertZoraSwimY")
         .Options(CheckboxOptions().DefaultValue(true).Tooltip(
