@@ -21,6 +21,9 @@
 #include "2s2h/Rando/Rando.h"
 #include "build.h"
 
+#include <fast/Fast3dGui.h>
+#include <fast/Fast3dWindow.h>
+
 extern "C" {
 #include "z64.h"
 #include "functions.h"
@@ -414,8 +417,9 @@ void BenMenu::AddSettings() {
         ImGui::SeparatorText("Thank You");
         ImGui::PopStyleColor();
         ImGui::SameLine();
-        ImTextureID heartTextureId = Ship::Context::GetInstance()->GetWindow()->GetGui()->GetTextureByName(
-            (const char*)gQuestIconHeartContainer2Tex);
+        ImTextureID heartTextureId =
+            std::dynamic_pointer_cast<Fast::Fast3dGui>(Ship::Context::GetInstance()->GetWindow()->GetGui())
+                ->GetTextureByName((const char*)gQuestIconHeartContainer2Tex);
         ImGui::Image(heartTextureId, ImVec2(25.0f, 25.0f));
         ImGui::TextWrapped("Special thanks to our contributors, playtesters, artists, moderators, helpers, and "
                            "everyone in the larger decomp & N64 communities who make this project possible.\n\n");
@@ -2243,13 +2247,13 @@ void BenMenu::InitElement() {
         { DISABLE_FOR_NOT_DIRECTX,
           { [](disabledInfo& info) -> bool {
                return Ship::Context::GetInstance()->GetWindow()->GetWindowBackend() !=
-                      Ship::WindowBackend::FAST3D_DXGI_DX11;
+                      Fast::WindowBackend::FAST3D_DXGI_DX11;
            },
             "Available Only on DirectX" } },
         { DISABLE_FOR_DIRECTX,
           { [](disabledInfo& info) -> bool {
                return Ship::Context::GetInstance()->GetWindow()->GetWindowBackend() ==
-                      Ship::WindowBackend::FAST3D_DXGI_DX11;
+                      Fast::WindowBackend::FAST3D_DXGI_DX11;
            },
             "Not Available on DirectX" } },
         { DISABLE_FOR_MATCH_REFRESH_RATE_ON,

@@ -26,9 +26,11 @@
 #include <ship/utils/StringHelper.h>
 #include <nlohmann/json.hpp>
 #include "build.h"
+#include <stb_image.h>
 
 #include <fast/interpreter.h>
 #include <fast/backends/gfx_rendering_api.h>
+#include <fast/Fast3dWindow.h>
 
 #ifdef __APPLE__
 #include <SDL_scancode.h>
@@ -614,7 +616,7 @@ void OTRGlobals::Initialize() {
     context->InitLogging(logLevel, logLevel);
     Ship::Context::GetInstance()->GetLogger()->set_pattern("[%H:%M:%S.%e] [%s:%#] [%^%l%$] %v");
 
-    context->InitGfxDebugger();
+    std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())->GetGfxDebugger();
     context->InitFileDropMgr();
 
     // tell LUS to reserve 3 2S2H specific threads (Game, Audio, Save)
@@ -2113,7 +2115,7 @@ extern "C" float OTRGetAspectRatio() {
 }
 
 extern "C" float OTRGetDimensionFromLeftEdge(float v) {
-    auto fastWnd = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
+    auto fastWnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
     auto intP = fastWnd->GetInterpreterWeak().lock();
 
     if (!intP) {
@@ -2127,7 +2129,7 @@ extern "C" float OTRGetDimensionFromLeftEdge(float v) {
 }
 
 extern "C" float OTRGetDimensionFromRightEdge(float v) {
-    auto fastWnd = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
+    auto fastWnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
     auto intP = fastWnd->GetInterpreterWeak().lock();
 
     if (!intP) {
@@ -2143,7 +2145,7 @@ extern "C" float OTRGetDimensionFromRightEdge(float v) {
 
 // Gets the width of the current render target area
 extern "C" uint32_t OTRGetGameRenderWidth() {
-    auto fastWnd = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
+    auto fastWnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
     auto intP = fastWnd->GetInterpreterWeak().lock();
 
     if (!intP) {
@@ -2159,7 +2161,7 @@ extern "C" uint32_t OTRGetGameRenderWidth() {
 
 // Gets the height of the current render target area
 extern "C" uint32_t OTRGetGameRenderHeight() {
-    auto fastWnd = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
+    auto fastWnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
     auto intP = fastWnd->GetInterpreterWeak().lock();
 
     if (!intP) {
@@ -2200,7 +2202,7 @@ Calling with Y (1,1) will return 10
 . . . _ _ _ _ _ _ _ _ . . .
 */
 extern "C" int32_t OTRConvertHUDXToScreenX(int32_t v) {
-    auto fastWnd = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
+    auto fastWnd = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow());
     auto intP = fastWnd->GetInterpreterWeak().lock();
 
     if (!intP) {
@@ -2227,7 +2229,7 @@ extern "C" int32_t OTRConvertHUDXToScreenX(int32_t v) {
 }
 
 extern "C" void Gfx_RegisterBlendedTexture(const char* name, u8* mask, u8* replacement) {
-    if (auto intP = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())
+    if (auto intP = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())
                         ->GetInterpreterWeak()
                         .lock()) {
         intP->RegisterBlendedTexture(name, mask, replacement);
@@ -2237,7 +2239,7 @@ extern "C" void Gfx_RegisterBlendedTexture(const char* name, u8* mask, u8* repla
 }
 
 extern "C" void Gfx_UnregisterBlendedTexture(const char* name) {
-    if (auto intP = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())
+    if (auto intP = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())
                         ->GetInterpreterWeak()
                         .lock()) {
         intP->UnregisterBlendedTexture(name);
@@ -2257,7 +2259,7 @@ extern "C" void Gfx_TextureCacheDelete(const uint8_t* texAddr) {
         texAddr = (const uint8_t*)ResourceGetDataByName(imgName);
     }
 
-    if (auto intP = dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())
+    if (auto intP = std::dynamic_pointer_cast<Fast::Fast3dWindow>(Ship::Context::GetInstance()->GetWindow())
                         ->GetInterpreterWeak()
                         .lock()) {
         intP->TextureCacheDelete(texAddr);

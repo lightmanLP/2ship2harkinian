@@ -11,6 +11,8 @@
 #include <tuple>
 #include <ship/config/Config.h>
 
+#include <fast/Fast3dWindow.h>
+
 extern "C" {
 #include "z64.h"
 #include "functions.h"
@@ -95,12 +97,12 @@ void Menu::RemoveSidebarSearch() {
 }
 
 void Menu::UpdateWindowBackendObjects() {
-    Ship::WindowBackend runningWindowBackend = Ship::Context::GetInstance()->GetWindow()->GetWindowBackend();
+    int32_t runningWindowBackend = Ship::Context::GetInstance()->GetWindow()->GetWindowBackend();
     int32_t configWindowBackendId = Ship::Context::GetInstance()->GetConfig()->GetInt("Window.Backend.Id", -1);
     if (Ship::Context::GetInstance()->GetWindow()->IsAvailableWindowBackend(configWindowBackendId)) {
-        configWindowBackend = static_cast<Ship::WindowBackend>(configWindowBackendId);
+        configWindowBackend = static_cast<Fast::WindowBackend>(configWindowBackendId);
     } else {
-        configWindowBackend = runningWindowBackend;
+        configWindowBackend = static_cast<Fast::WindowBackend>(runningWindowBackend);
     }
 
     availableWindowBackends = Ship::Context::GetInstance()->GetWindow()->GetAvailableWindowBackends();
@@ -308,7 +310,8 @@ void Menu::MenuDrawItem(WidgetInfo& widget, uint32_t width, UIWidgets::Colors me
                 UIWidgets::ComboboxOptions options = {};
                 options.color = menuThemeIndex;
                 options.tooltip = "Sets the audio API used by the game. Requires a relaunch to take effect.";
-                options.disabled = Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1;
+                options.disabled =
+                    Ship::Context::GetInstance()->GetAudio()->GetAvailableAudioBackends()->size() <= 1;
                 options.disabledTooltip = "Only one audio API is available on this platform.";
                 if (UIWidgets::Combobox("Audio API", &currentAudioBackend, &audioBackendsMap, options)) {
                     Ship::Context::GetInstance()->GetAudio()->SetCurrentAudioBackend(currentAudioBackend);
@@ -322,10 +325,9 @@ void Menu::MenuDrawItem(WidgetInfo& widget, uint32_t width, UIWidgets::Colors me
                 options.disabledTooltip = "Only one renderer API is available on this platform.";
                 if (UIWidgets::Combobox("Renderer API (Needs reload)", &configWindowBackend,
                                         &availableWindowBackendsMap, options)) {
-                    Ship::Context::GetInstance()->GetConfig()->SetInt("Window.Backend.Id",
-                                                                      (int32_t)(configWindowBackend));
+                    Ship::Context::GetInstance()->GetConfig()->SetInt("Window.Backend.Id", configWindowBackend);
                     Ship::Context::GetInstance()->GetConfig()->SetString("Window.Backend.Name",
-                                                                         windowBackendsMap.at(configWindowBackend));
+                                                                            windowBackendsMap.at(configWindowBackend));
                     Ship::Context::GetInstance()->GetConfig()->Save();
                     UpdateWindowBackendObjects();
                 }
