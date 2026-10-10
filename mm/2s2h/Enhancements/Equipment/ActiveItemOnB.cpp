@@ -7,6 +7,8 @@ extern "C" {
 #include "variables.h"
 
 void Player_UseItem(PlayState* play, Player* player, ItemId item);
+s32 Player_UpperAction_7(Player* thisx, PlayState* play);
+s32 Player_UpperAction_8(Player* thisx, PlayState* play);
 }
 
 void Player_PutAway(Player* player) {
@@ -33,10 +35,13 @@ constexpr bool PlayerHoldsItem(Player* player) {
 }
 
 constexpr bool IsAiming(Player* player) {
-    return (player->unk_AA5 == PLAYER_UNKAA5_3 ||
-            ( // overshoulder
-                player->unk_AA5 == PLAYER_UNKAA5_0 && (player->stateFlags1 & PLAYER_STATE1_PARALLEL) &&
-                player->focusActor == NULL));
+    // z-target check (including overshoulder, excluding target lock)
+    bool aimingBox = (player->unk_AA5 == PLAYER_UNKAA5_3);
+    bool transitionState = (player->unk_AA5 == PLAYER_UNKAA5_0);
+    bool itemDrawnInFirstPerson = (player->upperActionFunc == Player_UpperAction_7);
+    bool itemFire = (player->upperActionFunc == Player_UpperAction_8);
+    bool targetLock = (player->focusActor != NULL);
+    return ((aimingBox || (transitionState && (itemDrawnInFirstPerson || itemFire))) && !targetLock);
 }
 
 constexpr bool IsHoldingScoped(Player* player) {
