@@ -147,7 +147,7 @@ void RestoreBButtonItem() {
 }
 
 void PlayerUpdate(Actor* actor) {
-    Player* player = (Player*) actor;
+    Player* player = (Player*)actor;
     UpdateBButtonView(player);
     RestoreBButtonItem();
 }
