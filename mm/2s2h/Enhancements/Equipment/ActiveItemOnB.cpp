@@ -59,6 +59,7 @@ static struct ButtonState {
     ItemId stored = ITEM_NONE;
     ItemId override = ITEM_NONE;
     bool frameOverridden = false;
+    char* iconOverride = NULL;
 } mBButtonState;
 
 static bool IsSlotButtonClicked(EquipSlot slot) {
@@ -113,6 +114,21 @@ static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedI
     }
 }
 
+void UpdateBButtonView(Player* player) {
+    if (IsHoldingScoped(player)) {
+        char* icon = (char*)gItemIcons[(ItemId)player->heldItemId];
+        if (mBButtonState.iconOverride != icon) {
+            gPlayState->interfaceCtx.iconItemSegment[EQUIP_SLOT_B] = icon;
+            mBButtonState.iconOverride = icon;
+        }
+    } else {
+        if (mBButtonState.iconOverride != NULL) {
+            Interface_LoadItemIcon(gPlayState, EQUIP_SLOT_B);
+            mBButtonState.iconOverride = NULL;
+        }
+    }
+}
+
 // keeps EQUIP_SLOT_B integrity
 void RestoreBButtonItem() {
     if (!mBButtonState.frameOverridden) {
@@ -131,6 +147,8 @@ void RestoreBButtonItem() {
 }
 
 void PlayerUpdate(Actor* actor) {
+    Player* player = (Player*) actor;
+    UpdateBButtonView(player);
     RestoreBButtonItem();
 }
 
@@ -139,6 +157,11 @@ void CleanupBButtonSlot() {
         RestoreBButtonItem();
         mBButtonState.stored = ITEM_NONE;
     }
+
+    if (mBButtonState.iconOverride != NULL && gPlayState != NULL) {
+        Interface_LoadItemIcon(gPlayState, EQUIP_SLOT_B);
+    }
+    mBButtonState.iconOverride = NULL;
 }
 
 void RegisterActiveItemOnB() {
