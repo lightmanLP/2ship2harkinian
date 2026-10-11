@@ -2,6 +2,9 @@
 #include "2s2h/GameInteractor/GameInteractor.h"
 #include "2s2h/ShipInit.hpp"
 
+#define CVAR_NAME "gEnhancements.Equipment.ActiveItemOnB"
+#define CVAR CVarGetInteger(CVAR_NAME, 0)
+
 extern "C" {
 #include "z64interface.h"
 #include "variables.h"
@@ -132,7 +135,7 @@ void PlayerUpdate(Actor* actor) {
 }
 
 void CleanupBButtonSlot() {
-    if (mBButtonState.stored != ITEM_NONE && !CVarGetInteger("gEnhancements.Equipment.ActiveItemOnB", 0)) {
+    if (mBButtonState.stored != ITEM_NONE && !CVAR) {
         RestoreBButtonItem();
         mBButtonState.stored = ITEM_NONE;
     }
@@ -140,12 +143,12 @@ void CleanupBButtonSlot() {
 
 void RegisterActiveItemOnB() {
     CleanupBButtonSlot();
-    COND_VB_SHOULD(VB_GET_ITEM_ON_BUTTON, CVarGetInteger("gEnhancements.Equipment.ActiveItemOnB", 0), {
+    COND_VB_SHOULD(VB_GET_ITEM_ON_BUTTON, CVAR, {
         EquipSlot slot = (EquipSlot)va_arg(args, int);
         ItemId* item = va_arg(args, ItemId*);
         HandleGetItemOnButton(should, slot, item);
     });
-    COND_ID_HOOK(OnActorUpdate, ACTOR_PLAYER, CVarGetInteger("gEnhancements.Equipment.ActiveItemOnB", 0), PlayerUpdate);
+    COND_ID_HOOK(OnActorUpdate, ACTOR_PLAYER, CVAR, PlayerUpdate);
 }
 
-static RegisterShipInitFunc initFunc(RegisterActiveItemOnB, { "gEnhancements.Equipment.ActiveItemOnB" });
+static RegisterShipInitFunc initFunc(RegisterActiveItemOnB, { CVAR_NAME });
