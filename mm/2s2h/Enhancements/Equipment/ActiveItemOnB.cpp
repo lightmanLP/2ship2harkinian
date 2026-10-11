@@ -12,9 +12,13 @@ extern "C" {
 void Player_UseItem(PlayState* play, Player* player, ItemId item);
 s32 Player_UpperAction_7(Player* thisx, PlayState* play);
 s32 Player_UpperAction_8(Player* thisx, PlayState* play);
+
 EquipSlot func_8082FDC4(void);
 DpadEquipSlot func_Dpad_8082FDC4(void);
 }
+
+#define CLICKED_BUTTON ((s32)func_8082FDC4())
+#define CLICKED_DPAD_BUTTON ((s32)func_Dpad_8082FDC4())
 
 void Player_PutAway(Player* player) {
     if (player->heldItemAction > PLAYER_IA_LAST_USED) {
@@ -62,14 +66,18 @@ static struct ButtonState {
     char* iconOverride = NULL;
 } mBButtonState;
 
-static bool IsSlotButtonClicked(EquipSlot slot) {
-    Player* player = GET_PLAYER(gPlayState);
-
-    if (IS_HELD_DPAD(player->heldItemButton)) {
-        return (s32)slot == (s32)func_Dpad_8082FDC4();
-    } else {
-        return slot == func_8082FDC4();
+static bool IsHeldItemClicked(ItemId heldItem) {
+    s32 but = CLICKED_BUTTON;
+    if (but > EQUIP_SLOT_NONE && but < EQUIP_SLOT_MAX && (ItemId)C_BTN_ITEM(but) == heldItem) {
+        return true;
     }
+
+    s32 dpad = CLICKED_DPAD_BUTTON;
+    if (dpad > EQUIP_SLOT_D_NONE && dpad < EQUIP_SLOT_D_MAX && (ItemId)DPAD_BTN_ITEM(dpad) == heldItem) {
+        return true;
+    }
+
+    return false;
 }
 
 static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedItem) {
@@ -106,7 +114,7 @@ static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedI
     } else if (IsItemInScope(*pressedItem)) {
         if (IsHoldingScoped(player) && heldItem == *pressedItem) {
             // forces it to wait for exact click, not button hold
-            if (IsSlotButtonClicked(slot)) {
+            if (IsHeldItemClicked(heldItem)) {
                 Player_PutAway(player);
             }
             *pressedItem = ITEM_NONE;
@@ -173,7 +181,7 @@ void RegisterActiveItemOnB() {
     });
     COND_VB_SHOULD(VB_EXIT_FIRST_PERSON_MODE_FROM_BUTTON, CVAR, {
         Player* player = GET_PLAYER(gPlayState);
-        if (IsSlotButtonClicked(EQUIP_SLOT_B) && (ItemId)player->heldItemId == ITEM_HOOKSHOT) {
+        if ((ItemId)player->heldItemId == ITEM_HOOKSHOT && CLICKED_BUTTON == EQUIP_SLOT_B) {
             *should = false;
         }
     });
