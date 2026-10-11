@@ -9,6 +9,8 @@ extern "C" {
 void Player_UseItem(PlayState* play, Player* player, ItemId item);
 s32 Player_UpperAction_7(Player* thisx, PlayState* play);
 s32 Player_UpperAction_8(Player* thisx, PlayState* play);
+EquipSlot func_8082FDC4(void);
+DpadEquipSlot func_Dpad_8082FDC4(void);
 }
 
 void Player_PutAway(Player* player) {
@@ -56,6 +58,16 @@ static struct ButtonState {
     bool frameOverridden = false;
 } mBButtonState;
 
+static bool IsSlotButtonClicked(EquipSlot slot) {
+    Player* player = GET_PLAYER(gPlayState);
+
+    if (IS_HELD_DPAD(player->heldItemButton)) {
+        return (s32)slot == (s32)func_Dpad_8082FDC4();
+    } else {
+        return slot == func_8082FDC4();
+    }
+}
+
 static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedItem) {
     Player* player = GET_PLAYER(gPlayState);
 
@@ -89,7 +101,10 @@ static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedI
         }
     } else if (IsItemInScope(*pressedItem)) {
         if (IsHoldingScoped(player) && heldItem == *pressedItem) {
-            Player_PutAway(player);
+            // forces it to wait for exact click, not button hold
+            if (IsSlotButtonClicked(slot)) {
+                Player_PutAway(player);
+            }
             *pressedItem = ITEM_NONE;
         }
     }
