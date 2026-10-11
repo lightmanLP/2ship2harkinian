@@ -148,6 +148,12 @@ void RegisterActiveItemOnB() {
         ItemId* item = va_arg(args, ItemId*);
         HandleGetItemOnButton(should, slot, item);
     });
+    COND_VB_SHOULD(VB_EXIT_FIRST_PERSON_MODE_FROM_BUTTON, CVAR, {
+        Player* player = GET_PLAYER(gPlayState);
+        if (IsSlotButtonClicked(EQUIP_SLOT_B) && (ItemId)player->heldItemId == ITEM_HOOKSHOT) {
+            *should = false;
+        }
+    });
     COND_ID_HOOK(OnActorUpdate, ACTOR_PLAYER, CVAR, PlayerUpdate);
 }
 
