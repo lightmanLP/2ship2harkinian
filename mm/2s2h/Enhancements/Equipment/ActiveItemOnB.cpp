@@ -86,7 +86,7 @@ static bool IsHeldItemClicked(ItemId heldItem) {
     return false;
 }
 
-static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedItem) {
+static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedItem, bool isDpad) {
     Player* player = GET_PLAYER(gPlayState);
 
     if (player->transformation != PLAYER_FORM_HUMAN) {
@@ -184,7 +184,8 @@ void RegisterActiveItemOnB() {
     COND_VB_SHOULD(VB_GET_ITEM_ON_BUTTON, CVAR, {
         EquipSlot slot = (EquipSlot)va_arg(args, int);
         ItemId* item = va_arg(args, ItemId*);
-        HandleGetItemOnButton(should, slot, item);
+        bool isDpad = (bool)va_arg(args, int);
+        HandleGetItemOnButton(should, slot, item, isDpad);
     });
     COND_VB_SHOULD(VB_EXIT_FIRST_PERSON_MODE_FROM_BUTTON, CVAR, {
         Player* player = GET_PLAYER(gPlayState);
