@@ -68,7 +68,13 @@ static struct ButtonState {
 
 static bool IsHeldItemClicked(ItemId heldItem) {
     s32 but = CLICKED_BUTTON;
-    if (but > EQUIP_SLOT_NONE && but < EQUIP_SLOT_MAX && (ItemId)C_BTN_ITEM(but) == heldItem) {
+    if (
+        (
+            but == EQUIP_SLOT_C_LEFT
+            || but == EQUIP_SLOT_C_DOWN
+            || but == EQUIP_SLOT_C_RIGHT
+        ) && (ItemId)C_BTN_ITEM(but) == heldItem
+    ) {
         return true;
     }
 
