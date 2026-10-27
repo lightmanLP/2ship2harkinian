@@ -66,23 +66,24 @@ static struct ButtonState {
     char* iconOverride = NULL;
 } mBButtonState;
 
-static bool IsHeldItemClicked(ItemId heldItem) {
-    s32 but = CLICKED_BUTTON;
-    if (
-        (
-            but == EQUIP_SLOT_C_LEFT
-            || but == EQUIP_SLOT_C_DOWN
-            || but == EQUIP_SLOT_C_RIGHT
-        ) && (ItemId)C_BTN_ITEM(but) == heldItem
-    ) {
-        return true;
+static bool IsHeldItemClicked(ItemId heldItem, bool isDpad) {
+    if (!isDpad) {
+        s32 but = CLICKED_BUTTON;
+        if (
+            (
+                but == EQUIP_SLOT_C_LEFT
+                || but == EQUIP_SLOT_C_DOWN
+                || but == EQUIP_SLOT_C_RIGHT
+            ) && (ItemId)C_BTN_ITEM(but) == heldItem
+        ) {
+            return true;
+        }
+    } else {
+        s32 dpad = CLICKED_DPAD_BUTTON;
+        if (dpad > EQUIP_SLOT_D_NONE && dpad < EQUIP_SLOT_D_MAX && (ItemId)DPAD_BTN_ITEM(dpad) == heldItem) {
+            return true;
+        }
     }
-
-    s32 dpad = CLICKED_DPAD_BUTTON;
-    if (dpad > EQUIP_SLOT_D_NONE && dpad < EQUIP_SLOT_D_MAX && (ItemId)DPAD_BTN_ITEM(dpad) == heldItem) {
-        return true;
-    }
-
     return false;
 }
 
@@ -101,7 +102,7 @@ static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedI
 
     ItemId heldItem = (ItemId)player->heldItemId;
 
-    if (slot == EQUIP_SLOT_B) {
+    if (!isDpad && slot == EQUIP_SLOT_B) {
         if (IsHoldingScoped(player)) {
             // fixes camera
             if (IsFirstPersonItem(heldItem) && IsAiming(player)) {
@@ -122,7 +123,7 @@ static void HandleGetItemOnButton(bool* should, EquipSlot slot, ItemId* pressedI
     } else if (IsItemInScope(*pressedItem)) {
         if (IsHoldingScoped(player) && heldItem == *pressedItem) {
             // forces it to wait for exact click, not button hold
-            if (IsHeldItemClicked(heldItem)) {
+            if (IsHeldItemClicked(heldItem, isDpad)) {
                 Player_PutAway(player);
             }
             *pressedItem = ITEM_NONE;
