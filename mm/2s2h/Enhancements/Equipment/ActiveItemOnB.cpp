@@ -69,13 +69,8 @@ static struct ButtonState {
 static bool IsHeldItemClicked(ItemId heldItem, bool isDpad) {
     if (!isDpad) {
         s32 but = CLICKED_BUTTON;
-        if (
-            (
-                but == EQUIP_SLOT_C_LEFT
-                || but == EQUIP_SLOT_C_DOWN
-                || but == EQUIP_SLOT_C_RIGHT
-            ) && (ItemId)C_BTN_ITEM(but) == heldItem
-        ) {
+        if ((but == EQUIP_SLOT_C_LEFT || but == EQUIP_SLOT_C_DOWN || but == EQUIP_SLOT_C_RIGHT) &&
+            (ItemId)C_BTN_ITEM(but) == heldItem) {
             return true;
         }
     } else {
